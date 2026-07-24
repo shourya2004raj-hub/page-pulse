@@ -2,8 +2,8 @@
 
 Page Pulse is a lightweight webpage audit tool built for the Digital Heroes Software Development internship qualification task. Enter any public HTTP or HTTPS URL to receive a focused report on its technical response, content fundamentals, and SEO metadata.
 
-> **Live demo:** add your Vercel URL after deployment  
-> **API:** add your Render URL after deployment
+> **Live demo:** https://page-pulse-sigma-opal.vercel.app  
+> **API:** https://page-pulse-api-y6ll.onrender.com
 
 ## Features
 
