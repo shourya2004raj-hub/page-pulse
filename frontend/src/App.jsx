@@ -5,7 +5,8 @@ import AuditReport from "./components/AuditReport";
 import ThemeToggle from "./components/ThemeToggle";
 import { requestAudit } from "./services/auditApi";
 
-const initialTheme = window.localStorage.getItem("page-pulse-theme") || "light";
+const initialTheme =
+  window.localStorage.getItem("page-pulse-theme") || "light";
 
 export default function App() {
   const [url, setUrl] = useState("");
@@ -25,14 +26,14 @@ export default function App() {
 
     let normalizedUrl = url.trim();
 
-    // Check for empty input
+    // Empty input
     if (!normalizedUrl) {
       setError("Enter a website URL to begin the audit.");
       setReport(null);
       return;
     }
 
-    // Automatically prepend https:// if protocol is missing
+    // Automatically add https:// if missing
     if (
       !normalizedUrl.startsWith("http://") &&
       !normalizedUrl.startsWith("https://")
@@ -40,7 +41,7 @@ export default function App() {
       normalizedUrl = `https://${normalizedUrl}`;
     }
 
-    // Reject localhost and private network addresses
+    // Block localhost and private network addresses
     try {
       const hostname = new URL(normalizedUrl).hostname;
 
