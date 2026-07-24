@@ -22,10 +22,43 @@ export default function App() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const normalizedUrl = url.trim();
 
+    let normalizedUrl = url.trim();
+
+    // Check for empty input
     if (!normalizedUrl) {
       setError("Enter a website URL to begin the audit.");
+      setReport(null);
+      return;
+    }
+
+    // Automatically prepend https:// if protocol is missing
+    if (
+      !normalizedUrl.startsWith("http://") &&
+      !normalizedUrl.startsWith("https://")
+    ) {
+      normalizedUrl = `https://${normalizedUrl}`;
+    }
+
+    // Reject localhost and private network addresses
+    try {
+      const hostname = new URL(normalizedUrl).hostname;
+
+      if (
+        hostname === "localhost" ||
+        hostname === "127.0.0.1" ||
+        hostname.startsWith("192.168.") ||
+        hostname.startsWith("10.") ||
+        /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname)
+      ) {
+        setError(
+          "Please enter a publicly accessible website. Localhost and private network addresses cannot be audited."
+        );
+        setReport(null);
+        return;
+      }
+    } catch {
+      setError("Please enter a valid website URL.");
       setReport(null);
       return;
     }
@@ -48,24 +81,50 @@ export default function App() {
     <div className="app-shell">
       <header className="site-header">
         <a className="brand" href="/" aria-label="Page Pulse home">
-          <span className="brand__mark" aria-hidden="true">P</span>
+          <span className="brand__mark" aria-hidden="true">
+            P
+          </span>
           <span>Page Pulse</span>
         </a>
-        <ThemeToggle theme={theme} onToggle={() => setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"))} />
+
+        <ThemeToggle
+          theme={theme}
+          onToggle={() =>
+            setTheme((currentTheme) =>
+              currentTheme === "dark" ? "light" : "dark"
+            )
+          }
+        />
       </header>
 
       <main>
         <section className="hero" aria-labelledby="page-title">
           <p className="eyebrow">Webpage intelligence, in seconds</p>
+
           <h1 id="page-title">A clearer pulse on every page.</h1>
+
           <p className="hero__copy">
-            Check a webpage’s technical response, content fundamentals, and key SEO signals in one focused report.
+            Check a webpage’s technical response, content fundamentals, and key
+            SEO signals in one focused report.
           </p>
-          <AuditForm url={url} onUrlChange={setUrl} onSubmit={handleSubmit} isLoading={isLoading} />
-          <p className="form-note">Public HTTP and HTTPS pages only. We never store your audits.</p>
+
+          <AuditForm
+            url={url}
+            onUrlChange={setUrl}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
+
+          <p className="form-note">
+            Public HTTP and HTTPS pages only. We never store your audits.
+          </p>
         </section>
 
-        <section className="workspace" aria-live="polite" aria-busy={isLoading}>
+        <section
+          className="workspace"
+          aria-live="polite"
+          aria-busy={isLoading}
+        >
           {isLoading ? (
             <div className="state-card state-card--loading">
               <span className="loading-orb" aria-hidden="true" />
@@ -88,9 +147,15 @@ export default function App() {
 
           {!isLoading && !error && !report ? (
             <div className="empty-state">
-              <span className="empty-state__icon" aria-hidden="true">⌁</span>
+              <span className="empty-state__icon" aria-hidden="true">
+                ⌁
+              </span>
               <h2>Ready when you are</h2>
-              <p>Enter a full URL above to create your first audit report.</p>
+              <p>
+                Enter a website URL (for example, <strong>example.com</strong>{" "}
+                or <strong>https://example.com</strong>) to create your first
+                audit report.
+              </p>
             </div>
           ) : null}
         </section>
@@ -98,11 +163,15 @@ export default function App() {
 
       <footer className="site-footer">
         <span>Page Pulse · Focused webpage audits</span>
-        <a href="https://digitalheroesco.com" target="_blank" rel="noreferrer">
+
+        <a
+          href="https://digitalheroesco.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           Built for Digital Heroes Training Task
         </a>
       </footer>
     </div>
   );
 }
-
