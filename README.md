@@ -222,4 +222,5 @@ A public URL-fetching service must not be able to access internal hosts. Page Pu
 
 ## AI-use disclosure
 
-See [`docs/AI_DISCLOSURE.md`](docs/AI_DISCLOSURE.md). Personalize it so that it truthfully reflects your own review, testing, debugging, refinements, and final validation.
+
+> I used AI as a development assistant to accelerate research and implementation, pressure-test edge cases such as timeouts and unsafe URLs, improve documentation, and review the project architecture. I personally reviewed the design and code, ran the application and tests, debugged deployment issues, refined the final experience, and made the final implementation decisions. The submitted version reflects my own understanding and validation of the project.
