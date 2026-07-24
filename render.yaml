@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: page-pulse-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: REQUEST_TIMEOUT_SECONDS
+        value: "10"
+      - key: MAX_RESPONSE_BYTES
+        value: "2000000"
+      - key: MAX_REDIRECTS
+        value: "5"
+      - key: USER_AGENT
+        value: PagePulse/1.0
+      - key: CORS_ORIGINS
+        sync: false
